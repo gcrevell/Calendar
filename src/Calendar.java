@@ -26,6 +26,7 @@ import java.util.TreeSet;
  */
 public class Calendar {
 	
+	
 	TreeSet<Event> events = new TreeSet<Event>();
 	
 	public static final DateTime FIRST_SUNDAY = new DateTime("8-31-2014 12:00 am");
