@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.TreeSet;
 
 /**
  * @filename Calendar.java
@@ -26,7 +26,8 @@ import java.util.ArrayList;
  */
 public class Calendar {
 	
-	ArrayList<Event> events = new ArrayList<Event>();
+	TreeSet<Event> events = new TreeSet<Event>();
+	
 	public static final DateTime FIRST_SUNDAY = new DateTime("8-31-2014 12:00 am");
 	
 	public boolean deleteEvent(Event e) {
@@ -34,7 +35,7 @@ public class Calendar {
 	}
 	
 	public void createEvent(Event e) {
-		
+		events.add(e);
 	}
 	
 	public Event getNextEvent() {
@@ -46,7 +47,7 @@ public class Calendar {
 	}
 	
 	public Event[][] getWeek(DateTime startDay) {
-		//Chaeck if date is a sunday
+		//Check if date is a sunday
 		return null;
 	}
 
