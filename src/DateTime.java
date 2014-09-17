@@ -33,6 +33,8 @@ public class DateTime implements Comparable<DateTime> {
 	private short minute;
 	private boolean am;
 	
+	private static int[] DAYS_IN_MONTH = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	
 	public DateTime() {
 		
 	}
@@ -198,6 +200,18 @@ public class DateTime implements Comparable<DateTime> {
 	 */
 	public void setAm(boolean am) {
 		this.am = am;
+	}
+	
+	public void incrementDay() {
+		day++;
+		if (day > DAYS_IN_MONTH[month - 1]) {
+			day = 1;
+			month++;
+		}
+		if (month > 12) {
+			month = 1;
+			year++;
+		}
 	}
 
 }

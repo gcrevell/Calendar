@@ -25,8 +25,14 @@
 public class Event implements Comparable<Event> {
 	
 	private DateTime dateTime;
+	private DateTime endTime;
 	private String name;
 	private String type;
+	
+	public Event(String n, String t) {
+		name = n;
+		type = t;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
@@ -62,6 +68,20 @@ public class Event implements Comparable<Event> {
 	 */
 	public String getType() {
 		return type;
+	}
+	
+	/**
+	 * @return the endTime
+	 */
+	public DateTime getEndTime() {
+		return endTime;
+	}
+
+	/**
+	 * @param endTime the endTime to set
+	 */
+	public void setEndTime(DateTime endTime) {
+		this.endTime = endTime;
 	}
 
 }
