@@ -41,7 +41,11 @@ public class Calendar implements Serializable {
 	}
 	
 	public void createEvent(Event e) {
-		events.add(e);
+		if (e.getRecur()) {
+			createRecur(e);
+		} else {
+			events.add(e);
+		}
 	}
 	
 	public Event getNextEvent() {
@@ -78,6 +82,10 @@ public class Calendar implements Serializable {
 		}
 		
 		return null;
+	}
+	
+	public void createRecur(Event e) {
+		
 	}
 
 }

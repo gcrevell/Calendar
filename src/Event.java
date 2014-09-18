@@ -31,6 +31,8 @@ public class Event implements Comparable<Event>, Serializable  {
 	private DateTime endTime;
 	private String name;
 	private String type;
+	private boolean recur;
+	private boolean[] recurrance = new boolean[7];
 	
 	public Event(String n, String t) {
 		name = n;
@@ -142,6 +144,14 @@ public class Event implements Comparable<Event>, Serializable  {
 	 */
 	public void setEndTime(DateTime endTime) {
 		this.endTime = endTime;
+	}
+	
+	public boolean getRecur() {
+		return recur;
+	}
+	
+	public boolean[] getRecurrance() {
+		return recurrance;
 	}
 
 }
