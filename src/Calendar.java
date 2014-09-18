@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.TreeSet;
 
 /**
@@ -30,10 +31,10 @@ public class Calendar implements Serializable {
 	
 	private static final long serialVersionUID = -147953699231233621L;
 
-	TreeSet<Event> events = new TreeSet<Event>();
+	ArrayList<Event> events = new ArrayList<Event>();
 	
 	public static final DateTime FIRST_SUNDAY = new DateTime("8-31-2014 12:00 am");
-	
+	public static final DateTime LAST_SATURDAY = new DateTime("12-20-2014 11:59 pm");
 	public boolean deleteEvent(Event e) {
 		return false;
 	}
@@ -52,6 +53,7 @@ public class Calendar implements Serializable {
 	
 	public Event[][] getWeek(DateTime startDay) {
 		//Check if date is a sunday
+		
 		return null;
 	}
 

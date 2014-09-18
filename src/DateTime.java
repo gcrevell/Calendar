@@ -105,6 +105,10 @@ public class DateTime implements Comparable<DateTime>, Serializable  {
 		startIndex = endIndex + 1;
 		endIndex = s.indexOf(' ', startIndex);
 		
+		if (endIndex < startIndex) {
+			endIndex = s.length();
+		}
+		
 		{
 			String tmp = s.substring(startIndex, endIndex);
 			if (tmp.length() == 4) {
@@ -114,6 +118,13 @@ public class DateTime implements Comparable<DateTime>, Serializable  {
 			} else {
 				throw new NumberFormatException("Invalid input to DateTime. The year is not 2 or 4 digits long.");
 			}
+		}
+		
+		if (endIndex == s.length()) {
+			hour = 12;
+			minute = 0;
+			am = true;
+			return;
 		}
 		
 		startIndex = s.indexOf(' ') + 1;
@@ -153,7 +164,37 @@ public class DateTime implements Comparable<DateTime>, Serializable  {
 	public int compareTo(DateTime o) {
 		if (getYear() < o.getYear()) {
 			return -1;
-		} else if (getYear() < o.getYear()) {
+		} else if (getYear() > o.getYear()) {
+			return 1;
+		}
+		
+		if (getMonth() < o.getMonth()) {
+			return -1;
+		} else if (getMonth() > o.getMonth()) {
+			return 1;
+		}
+		
+		if (getDay() < o.getDay()) {
+			return -1;
+		} else if (getDay() > o.getDay()) {
+			return 1;
+		}
+		
+		if (isAm() && !o.isAm()) {
+			return -1;
+		} else if (!isAm() && o.isAm()) {
+			return 1;
+		}
+		
+		if (getHour() < o.getHour()) {
+			return -1;
+		} else if (getHour() > o.getHour()) {
+			return 1;
+		}
+		
+		if (getMinute() < o.getMinute()) {
+			return -1;
+		} else if (getMinute() > o.getMinute()) {
 			return 1;
 		}
 		return 0;
@@ -253,6 +294,16 @@ public class DateTime implements Comparable<DateTime>, Serializable  {
 			month = 1;
 			year++;
 		}
+	}
+	
+	public void incrementWeek() {
+		incrementDay();
+		incrementDay();
+		incrementDay();
+		incrementDay();
+		incrementDay();
+		incrementDay();
+		incrementDay();
 	}
 
 }

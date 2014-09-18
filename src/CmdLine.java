@@ -3,6 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Scanner;
 
 /**
  * @filename CmdLine.java
@@ -42,12 +43,51 @@ public class CmdLine {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Calendar cal = loadCal();
+		Scanner in = new Scanner(System.in);
+
 		if (cal == null) {
 			cal = new Calendar();
 		}
 		System.out.println("Welcome to the MTU calendar app!");
 		System.out.println("To use this calendar, simpley type your command at the prompt");
 
+		while (true) {
+			System.out.println("To see a list of available commands, enter \"cmd\"");
+			System.out.print("Please type a command:  ");
+			String input = in.nextLine();
+			if (input.equalsIgnoreCase("cmd")) {
+				commands();
+			} else if (input.equalsIgnoreCase("View week")) {
+				boolean done = false;
+				DateTime d = null;
+				while (!done) {
+					System.out.print("Please enter the date of sunday (m-d-y):  ");
+					try {
+						d = new DateTime(in.nextLine());
+						done = true;
+					} catch (Exception e) {
+						e.printStackTrace();
+						System.out.println("That date is not correctly formatted!");
+					}
+				}
+				printWeek(cal, d);
+			}
+		}
+	}
+
+	/**
+	 * Description
+	 * 
+	 * @author Gabriel Revells
+	 * 
+	 * @date Sep 18, 2014
+	 *
+	 */
+	private static void commands() {
+		System.out.println("\"Add event\" - Create a new event");
+		System.out.println("\"Delete event\" - Delete an event");
+		System.out.println("\"View week\" - View a week");
+		System.out.println("\"View day\" - View a day");
 	}
 
 	public static Calendar loadCal() {
