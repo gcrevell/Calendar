@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /**
  * @filename Event.java
  *
@@ -22,8 +24,9 @@
  * @date Sep 14, 2014
  *
  */
-public class Event implements Comparable<Event> {
+public class Event implements Comparable<Event>, Serializable  {
 	
+	private static final long serialVersionUID = -8868284838624146789L;
 	private DateTime dateTime;
 	private DateTime endTime;
 	private String name;
