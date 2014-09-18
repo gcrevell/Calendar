@@ -55,22 +55,18 @@ public class CmdLine {
 			System.out.println("To see a list of available commands, enter \"cmd\"");
 			System.out.print("Please type a command:  ");
 			String input = in.nextLine();
+
+			//Check input command
 			if (input.equalsIgnoreCase("cmd")) {
 				commands();
 			} else if (input.equalsIgnoreCase("View week")) {
-				boolean done = false;
-				DateTime d = null;
-				while (!done) {
-					System.out.print("Please enter the date of sunday (m-d-y):  ");
-					try {
-						d = new DateTime(in.nextLine());
-						done = true;
-					} catch (Exception e) {
-						e.printStackTrace();
-						System.out.println("That date is not correctly formatted!");
-					}
-				}
-				printWeek(cal, d);
+				
+			} else if (input.equalsIgnoreCase("add event")) {
+				saveCal(cal);
+			} else if (input.equalsIgnoreCase("delete event")) {
+				saveCal(cal);
+			} else {
+				System.out.println("That is not a valid command. Please try again.");
 			}
 		}
 	}
@@ -116,8 +112,13 @@ public class CmdLine {
 		}
 	}
 
-	public static void printWeek(Calendar cal, DateTime sunday) {
+	public static boolean printWeek(Calendar cal, DateTime sunday) {
 		Event[][] events = cal.getWeek(sunday);
+		
+		if (events == null) {
+			//The date was outside of the range of dates!
+			return false;
+		}
 		events = new Event[7][0];
 		events[0] = new Event[1];
 		events[0][0] = new Event("testing", "class");
@@ -254,6 +255,7 @@ public class CmdLine {
 
 			System.out.println();
 		}
+		return true;
 	}
 
 	public static String space(int x) {

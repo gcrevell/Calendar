@@ -72,12 +72,23 @@ public class Calendar implements Serializable {
 		
 		Event[][] ret = new Event[7][0];
 		check = new DateTime(last.toString());
+		check.incrementDay();
 		
 		for (int i = 0; i < 7; i++) {
+			ArrayList<Event> day = new ArrayList<Event>();
 			
+			for (Event e : events) {
+				if (e.getDateTime().compareTo(last) > 0 && e.getDateTime().compareTo(check) < 0) {
+					day.add(e);
+				}
+			}
+			
+			ret[i] = day.toArray(new Event[0]);
+			check.incrementDay();
+			last.incrementDay();
 		}
 		
-		return null;
+		return ret;
 	}
 
 }
