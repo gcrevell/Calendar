@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.TreeSet;
 
 /**
@@ -24,9 +25,11 @@ import java.util.TreeSet;
  * @date Sep 14, 2014
  *
  */
-public class Calendar {
+public class Calendar implements Serializable {
 	
 	
+	private static final long serialVersionUID = -147953699231233621L;
+
 	TreeSet<Event> events = new TreeSet<Event>();
 	
 	public static final DateTime FIRST_SUNDAY = new DateTime("8-31-2014 12:00 am");

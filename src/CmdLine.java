@@ -1,3 +1,9 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 /**
  * @filename CmdLine.java
  *
@@ -35,8 +41,39 @@ public class CmdLine {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Calendar cal = new Calendar();
-		printWeek(cal, Calendar.FIRST_SUNDAY);
+		Calendar cal = loadCal();
+		if (cal == null) {
+			cal = new Calendar();
+		}
+		System.out.println("Welcome to the MTU calendar app!");
+		System.out.println("To use this calendar, simpley type your command at the prompt");
+
+	}
+
+	public static Calendar loadCal() {
+		Calendar cal = null;
+		try {
+			ObjectInputStream in = new ObjectInputStream(new FileInputStream("Calendar.ser"));
+			cal = (Calendar) in.readObject();
+			in.close();
+		} catch(IOException i) {
+			//i.printStackTrace();
+			return null;
+		} catch(ClassNotFoundException c) {
+			//c.printStackTrace();
+			return null;
+		}
+		return cal;
+	}
+
+	public static void saveCal(Calendar cal) {
+		try {
+			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Calendar.ser"));
+			out.writeObject(cal);
+			out.close();
+		} catch(IOException i) {
+			//i.printStackTrace();
+		}
 	}
 
 	public static void printWeek(Calendar cal, DateTime sunday) {
@@ -87,23 +124,23 @@ public class CmdLine {
 		for (int i = 0; i < 24; i++) {
 			//i is the hour of the day
 			System.out.print(t[i*2] + "|");
-			
+
 			for (int j = 0; j < 7; j++) {
 				//j is the day of the week
 				if (events[j].length == 0) {
 					System.out.print(space(18) + "|");
 					continue;
 				}
-				
+
 				String s = "";
-				
+
 				for (int k = 0; k < events[j].length; k++) {
 					//k is the events of the day
 					int h = events[j][k].getDateTime().getHour();
 					if (!events[j][k].getDateTime().isAm()) {
 						h += 12;
 					}
-					
+
 					if (h == i) {
 						if (s.length() != 0) {
 							s = "  Double booked   ";
@@ -125,44 +162,44 @@ public class CmdLine {
 			System.out.println();
 
 			System.out.print(t[i*2 + 1] + "|");
-			
+
 			for (int j = 0; j < 7; j++) {
 				//j is the day of the week
 				if (events[j].length == 0) {
 					System.out.print(space(18) + "|");
 					continue;
 				}
-				
+
 				String s = "";
-				
+
 				for (int k = 0; k < events[j].length; k++) {
 					//k is the events of the day
 					int h = events[j][k].getDateTime().getHour();
 					if (!events[j][k].getDateTime().isAm()) {
 						h += 12;
 					}
-					
+
 					if (h == i) {
 						if (s.length() != 0) {
 							s = space(18);
 							break;
 						}
 						s = events[j][k].getDateTime().getHour() + ":";
-						
+
 						if (events[j][k].getDateTime().getMinute() < 10) {
 							s += "0" + events[j][k].getDateTime().getMinute();
 						} else {
 							s += events[j][k].getDateTime().getMinute();
 						}
-						
+
 						s += " to " + events[j][k].getEndTime().getHour() + ":";
-						
+
 						if (events[j][k].getEndTime().getMinute() < 10) {
 							s += "0" + events[j][k].getEndTime().getMinute();
 						} else {
 							s += events[j][k].getEndTime().getMinute();
 						}
-						
+
 						if (s.length() > 18) {
 							s = s.substring(0, 15) + "...";
 						}
