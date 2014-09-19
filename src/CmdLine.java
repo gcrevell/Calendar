@@ -3,6 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -106,6 +107,14 @@ public class CmdLine {
 					}
 					rep = true;
 				} while (!dayView(cal, d));
+			} else if (input.equalsIgnoreCase("next event")) {
+				Event next = cal.getNextEvent();
+				
+				if (next == null) {
+					System.out.println("You do not have any more events.");
+				} else {
+					System.out.println("Up next you have " + next.getName() + " starting at " + next.getDateTime());
+				}
 			}
 
 			else {
@@ -297,10 +306,10 @@ public class CmdLine {
 			cal = (Calendar) in.readObject();
 			in.close();
 		} catch(IOException i) {
-			i.printStackTrace();
+			//i.printStackTrace();
 			return null;
 		} catch(ClassNotFoundException c) {
-			c.printStackTrace();
+			//c.printStackTrace();
 			return null;
 		}
 		return cal;

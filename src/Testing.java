@@ -1,3 +1,5 @@
+import java.util.Date;
+
 /**
  * @filename Testing.java
  *
@@ -40,6 +42,8 @@ public class Testing {
 		DateTime date3 = new DateTime("9-1-2014 12:00 am");
 		System.out.println(date.compareTo(date2));
 		System.out.println(date2.compareTo(date3));
+		Date d = new Date();
+		System.out.println(d.getYear() + 1900);
 	}
 
 }

@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.TreeSet;
 
 /**
@@ -49,6 +50,15 @@ public class Calendar implements Serializable {
 	}
 	
 	public Event getNextEvent() {
+		Date d = new Date();
+		@SuppressWarnings("deprecation")
+		DateTime dt = new DateTime((d.getMonth() + 1) + "-" + d.getDate() + "-" + (d.getYear() + 1900));
+		
+		for (Event e : events) {
+			if (e.getDateTime().compareTo(dt) > 0) {
+				return e;
+			}
+		}
 		return null;
 	}
 	
