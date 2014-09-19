@@ -146,8 +146,16 @@ public class Event implements Comparable<Event>, Serializable  {
 		this.endTime = endTime;
 	}
 	
+	public void setRecur(Boolean recur){
+		this.recur = recur;
+	}
+	
 	public boolean getRecur() {
 		return recur;
+	}
+	
+	public void setRecurrance(boolean[] recurrance){
+		this.recurrance = recurrance;
 	}
 	
 	public boolean[] getRecurrance() {

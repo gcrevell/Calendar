@@ -42,7 +42,7 @@ public class Calendar implements Serializable {
 	
 	public void createEvent(Event e) {
 		if (e.getRecur()) {
-			createRecur(e);
+			createRecurDiff(e);
 		} else {
 			events.add(e);
 		}
@@ -84,8 +84,80 @@ public class Calendar implements Serializable {
 		return null;
 	}
 	
-	public void createRecur(Event e) {
-		
+	public void createRecurSame(Event e){
+		events.add(e);
+		DateTime date = e.getDateTime();
+		DateTime end = e.getEndTime();
+		while(date.compareTo(LAST_SATURDAY) == -1){
+			Event x = new Event(e.getName(), e.getType());
+			DateTime change = changeByWeek(date);
+			DateTime changeEnd = changeByWeek(end);
+			x.setDateTime(change);
+			x.setEndTime(changeEnd);
+			x.setRecur(e.getRecur());
+			x.setRecurrance(e.getRecurrance());
+			events.add(x);
+			date = change;
+			end = changeEnd;
+		}
+	}
+	public void createRecurDiff(Event e) {
+		int day = e.getDateTime().dayOffest();
+		for(int i = 0; i<7; i++){
+			if(e.getRecurrance()[i]){
+				if(i==day){
+					createRecurSame(e);
+				}
+				else if(i<day){
+					int diff = 7-(i-day);
+					Event x = new Event(e.getName(), e.getType());
+					DateTime change = changeByDay(e.getDateTime(), diff);
+					DateTime changeEnd = changeByDay(e.getEndTime(), diff);
+					x.setDateTime(change);
+					x.setEndTime(changeEnd);
+					x.setRecur(e.getRecur());
+					x.setRecurrance(e.getRecurrance());
+					createRecurSame(x);
+				}
+				else{
+					int diff = i-day;
+					Event x = new Event(e.getName(), e.getType());
+					DateTime change = changeByDay(e.getDateTime(), diff);
+					DateTime changeEnd = changeByDay(e.getEndTime(), diff);
+					x.setDateTime(change);
+					x.setEndTime(changeEnd);
+					x.setRecur(e.getRecur());
+					x.setRecurrance(e.getRecurrance());
+					createRecurSame(x);
+				}
+			}
+			
+		}
+	}
+	
+	public DateTime changeByWeek(DateTime date){
+		DateTime change = new DateTime();
+		change.setAm(date.isAm());
+		change.setDay(date.getDay());
+		change.setHour(date.getHour());
+		change.setMinute(date.getMinute());
+		change.setMonth(date.getMonth());
+		change.setYear(date.getYear());
+		change.incrementWeek();
+		return change;
+	}
+	public DateTime changeByDay(DateTime date, int inc){
+		DateTime change = new DateTime();
+		change.setAm(date.isAm());
+		change.setDay(date.getDay());
+		change.setHour(date.getHour());
+		change.setMinute(date.getMinute());
+		change.setMonth(date.getMonth());
+		change.setYear(date.getYear());
+		for(int j = 0; j<inc; j++){
+			change.incrementDay();
+		}
+		return change;
 	}
 
 }
