@@ -53,7 +53,22 @@ public class Calendar implements Serializable {
 	}
 	
 	public Event[] getDay(DateTime day) {
-		return null;
+		if (day.compareTo(FIRST_SUNDAY) < 0 || day.compareTo(LAST_SATURDAY) > 0) {
+			return null;
+		}
+		
+		DateTime end = new DateTime(day.toString());
+		end.incrementDay();
+		
+		ArrayList<Event> a = new ArrayList<Event>();
+		
+		for (Event e : events) {
+			if (e.getDateTime().compareTo(day) >= 0 && e.getDateTime().compareTo(end) < 0) {
+				a.add(e);
+			}
+		}
+		
+		return a.toArray(new Event[0]);
 	}
 	
 	public Event[][] getWeek(DateTime startDay) {
@@ -62,26 +77,42 @@ public class Calendar implements Serializable {
 		}
 		
 		//Check if date is a sunday
-		DateTime check = FIRST_SUNDAY;
-		DateTime last = FIRST_SUNDAY; 
+		DateTime check = new DateTime(FIRST_SUNDAY.toString());
+		DateTime last = new DateTime(FIRST_SUNDAY.toString()); 
 		
 		while (check.compareTo(LAST_SATURDAY) < 0) {
 			if (check.compareTo(startDay) > 0) {
 				break;
 			}
 			
-			last = check;
+			last = new DateTime(check.toString());
 			check.incrementWeek();
 		}
 		
+		startDay.setYear(last.getYear());
+		startDay.setMonth(last.getMonth());
+		startDay.setDay(last.getDay());
+		
 		Event[][] ret = new Event[7][0];
 		check = new DateTime(last.toString());
+		check.incrementDay();
 		
 		for (int i = 0; i < 7; i++) {
+			ArrayList<Event> day = new ArrayList<Event>();
 			
+			for (Event e : events) {
+				if (e.getDateTime().compareTo(last) >= 0 && e.getDateTime().compareTo(check) < 0) {
+					day.add(e);
+				}
+			}
+			
+			ret[i] = day.toArray(new Event[0]);
+			
+			last.incrementDay();
+			check.incrementDay();
 		}
 		
-		return null;
+		return ret;
 	}
 	
 	public void createRecurSame(Event e){

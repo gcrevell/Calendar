@@ -186,9 +186,9 @@ public class DateTime implements Comparable<DateTime>, Serializable  {
 			return 1;
 		}
 		
-		if (getHour() < o.getHour()) {
+		if (getHour() % 12 < o.getHour() % 12) {
 			return -1;
-		} else if (getHour() > o.getHour()) {
+		} else if (getHour() % 12 > o.getHour() % 12) {
 			return 1;
 		}
 		
@@ -308,7 +308,7 @@ public class DateTime implements Comparable<DateTime>, Serializable  {
 	
 	public int dayOffest() {
 		int cnt = 0;
-		DateTime d = Calendar.FIRST_SUNDAY;
+		DateTime d = new DateTime(Calendar.FIRST_SUNDAY.toString());
 		
 		if (d.compareTo(this) > 0) {
 			return -1;

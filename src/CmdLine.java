@@ -51,28 +51,227 @@ public class CmdLine {
 		System.out.println("Welcome to the MTU calendar app!");
 		System.out.println("To use this calendar, simpley type your command at the prompt");
 
-		while (true) {
+		inputLoop: while (true) {
 			System.out.println("To see a list of available commands, enter \"cmd\"");
-			System.out.print("Please type a command:  ");
+			System.out.println("Please type a command:");
 			String input = in.nextLine();
 			if (input.equalsIgnoreCase("cmd")) {
 				commands();
 			} else if (input.equalsIgnoreCase("View week")) {
-				boolean done = false;
 				DateTime d = null;
-				while (!done) {
-					System.out.print("Please enter the date of sunday (m-d-y):  ");
-					try {
-						d = new DateTime(in.nextLine());
-						done = true;
-					} catch (Exception e) {
-						e.printStackTrace();
-						System.out.println("That date is not correctly formatted!");
+				boolean rep = false;
+				do {
+					if (rep) {
+						System.out.println("The date you entered was not in the range of this semester.");
+						rep = false;
 					}
-				}
-				printWeek(cal, d);
+					System.out.println("Please enter the date of the week you want (m-d-y) or \"cancel\":");
+					String test = in.nextLine();
+					if (test.equalsIgnoreCase("cancel")) {
+						continue inputLoop;
+					}
+					try {
+						d = new DateTime(test);
+					} catch (Exception e) {
+						System.out.println("The date was not formatted correctly.");
+						continue;
+					}
+					rep = true;
+				} while (!printWeek(cal, d));
+			} else if (input.equalsIgnoreCase("Add event")) {
+				addEvent(cal);
+				saveCal(cal);
+			} else if (input.equalsIgnoreCase("Delete event")) {
+
+			} else if (input.equalsIgnoreCase("terminate")) {
+				break;
+			} else if (input.equalsIgnoreCase("view day")) {
+				DateTime d = null;
+				boolean rep = false;
+				do {
+					if (rep) {
+						System.out.println("The date you entered was not in the range of this semester.");
+						rep = false;
+					}
+					System.out.println("Please enter the day you would like to view (m-d-y) or \"cancel\":");
+					String test = in.nextLine();
+					if (test.equalsIgnoreCase("cancel")) {
+						continue inputLoop;
+					}
+					try {
+						d = new DateTime(test);
+					} catch (Exception e) {
+						System.out.println("The date was not formatted correctly.");
+						continue;
+					}
+					rep = true;
+				} while (!dayView(cal, d));
+			}
+
+			else {
+				System.out.println("That is not a valid command. Please try again.");
 			}
 		}
+		in.close();
+	}
+
+	/**
+	 * Description
+	 * 
+	 * @author Gabriel Revells
+	 * 
+	 * @date Sep 19, 2014
+	 *
+	 * @param cal
+	 * @param d
+	 */
+	private static boolean dayView(Calendar cal, DateTime d) {
+		Event[] events = cal.getDay(d);
+
+		if (events == null) {
+			return false;
+		}
+
+		//30 spaces across
+		String title = "Events for " + d.getMonth() + "-" + d.getDay();
+		String spacer = "---------------------------------------------";
+		int x = 45 - title.length();
+		title = space(x/2 + x%2) + title + space(x/2);
+		System.out.println(title);
+
+		if (events.length == 0) {
+			System.out.println(spacer);
+			title = "You have no events for this day!";
+			x = 45 - title.length();
+			title = space(x/2 + x%2) + title + space(x/2);
+			System.out.println(title);
+			return true;
+		}
+
+		for (Event e : events) {
+			System.out.println(spacer);
+			title = e.getName();
+			x = 45 - title.length();
+			if (x < 0) {
+				title = title.substring(0, 42) + "...";
+			} else {
+				title = space(x/2 + x%2) + title + space(x/2);
+			}
+			System.out.println(title);
+
+			title = "from " + e.getDateTime().getHour() + ":";
+			if (e.getDateTime().getMinute() < 10) {
+				title += "0";
+			}
+			title += e.getDateTime().getMinute();
+			if (e.getDateTime().isAm()) {
+				title += " am";
+			} else {
+				title += " pm";
+			}
+			title += " to " + e.getEndTime().getHour() + ":";
+			if (e.getEndTime().getMinute() < 10) {
+				title += 0;
+			}
+			title += e.getEndTime().getMinute();
+			if (e.getEndTime().isAm()) {
+				title += " am";
+			} else {
+				title += " pm";
+			}
+
+			//title = "From " + e.getDateTime().getHour() + ":" + e.getDateTime().getMinute() + " to " + e.getEndTime().getHour() + ":" + e.getEndTime().getMinute();
+			x = 45 - title.length();
+			title = space(x/2 + x%2) + title + space(x/2);
+			System.out.println(title);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Description
+	 * 
+	 * @author Gabriel Revells
+	 * @param cal 
+	 * 
+	 * @date Sep 19, 2014
+	 *
+	 */
+	private static void addEvent(Calendar cal) {
+		Scanner in = new Scanner(System.in);
+
+		System.out.println("Please enter the name of the event:");
+		String name = in.nextLine();
+
+		System.out.println("Please enter the type of the event\n(class, meeting, work, other):");
+		String type = in.nextLine();
+
+		if (type.equalsIgnoreCase("Class")) {
+			Event e = new Event(name, type);
+			e.setRecur(true);
+
+			System.out.println("Enter the days of the week the class occurs on (m, t, w, r, f):");
+			String days = in.nextLine();
+			days.replaceAll(" ", "");
+
+			for (char c : days.toCharArray()) {
+				e.setRecurrance(c);
+			}
+
+			while (true) {
+				System.out.println("Please enter the start time of the class (h:m am):");
+				try {
+					e.setDateTime(new DateTime("8-31-14 " + in.nextLine()));
+				} catch (Exception ex) {
+					System.out.println("The date was not formatted correctly.");
+					continue;
+				}
+
+				System.out.println("Please enter the end time of the class (h:m am):");
+				try {
+					e.setEndTime(new DateTime("8-31-14 " + in.nextLine()));
+				} catch (Exception ex) {
+					System.out.println("The date was not formatted correctly.");
+					continue;
+				}
+				break;
+			}
+
+			cal.createEvent(e);
+		} else {
+			Event e = new Event(name, type);
+			
+			while (true) {
+				System.out.println("Please enter the start date and time of the event (m-d-y h:m):");
+				try {
+					e.setDateTime(new DateTime(in.nextLine()));
+				} catch (Exception ex) {
+					System.out.println("The date was not formatted correctly.");
+					continue;
+				}
+
+				System.out.println("Please enter the end date and time of the event (m-d-y h:m):");
+				try {
+					e.setEndTime(new DateTime(in.nextLine()));
+				} catch (Exception ex) {
+					System.out.println("The date was not formatted correctly.");
+					continue;
+				}
+				break;
+			}
+
+			System.out.println("Would you like to repeat this event every week? (yes or no):");
+			if (in.nextLine().equalsIgnoreCase("yes")) {
+				e.setRecur(true);
+				boolean[] array = new boolean[7];
+				array[e.getDateTime().dayOffest()] = true;
+				e.setRecurrance(array);
+			}
+
+			cal.createEvent(e);
+		}
+		in.close();
 	}
 
 	/**
@@ -88,6 +287,7 @@ public class CmdLine {
 		System.out.println("\"Delete event\" - Delete an event");
 		System.out.println("\"View week\" - View a week");
 		System.out.println("\"View day\" - View a day");
+		System.out.println("\"Terminate\" - End the program");
 	}
 
 	public static Calendar loadCal() {
@@ -97,10 +297,10 @@ public class CmdLine {
 			cal = (Calendar) in.readObject();
 			in.close();
 		} catch(IOException i) {
-			//i.printStackTrace();
+			i.printStackTrace();
 			return null;
 		} catch(ClassNotFoundException c) {
-			//c.printStackTrace();
+			c.printStackTrace();
 			return null;
 		}
 		return cal;
@@ -111,18 +311,16 @@ public class CmdLine {
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Calendar.ser"));
 			out.writeObject(cal);
 			out.close();
-		} catch(IOException i) {
-			//i.printStackTrace();
+		} catch(Exception i) {
+			i.printStackTrace();
 		}
 	}
 
-	public static void printWeek(Calendar cal, DateTime sunday) {
+	public static boolean printWeek(Calendar cal, DateTime sunday) {
 		Event[][] events = cal.getWeek(sunday);
-		events = new Event[7][0];
-		events[0] = new Event[1];
-		events[0][0] = new Event("testing", "class");
-		events[0][0].setDateTime(new DateTime("8-31-14 7:00 am"));
-		events[0][0].setEndTime(new DateTime("8-31-14 8:00 am"));
+		if (events == null) {
+			return false;
+		}
 		//day spaces are 18 wide
 		//tabs are 8 spaces
 		System.out.println("\t|      Sunday      |      Monday      |     Tuesday      |    Wednesday     |     Thursday     |      Friday      |     Saturday     |");
@@ -254,6 +452,7 @@ public class CmdLine {
 
 			System.out.println();
 		}
+		return true;
 	}
 
 	public static String space(int x) {

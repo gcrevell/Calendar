@@ -161,5 +161,23 @@ public class Event implements Comparable<Event>, Serializable  {
 	public boolean[] getRecurrance() {
 		return recurrance;
 	}
+	
+	public void setRecurrance(char c) {
+		if (c == 'm' || c == 'M') {
+			recurrance[1] = true;
+		}
+		if (c == 't' || c == 'T') {
+			recurrance[2] = true;
+		}
+		if (c == 'w' || c == 'W') {
+			recurrance[3] = true;
+		}
+		if (c == 'r' || c == 'T') {
+			recurrance[4] = true;
+		}
+		if (c == 'f' || c == 'F') {
+			recurrance[5] = true;
+		}
+	}
 
 }

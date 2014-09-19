@@ -35,8 +35,11 @@ public class Testing {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		DateTime date = new DateTime("09-14-2014 4:01 pm");
-		System.out.println(date);
+		DateTime date = new DateTime("8-31-2014 12:00 am");
+		DateTime date2 = new DateTime("9-1-2014 5:00 pm");
+		DateTime date3 = new DateTime("9-1-2014 12:00 am");
+		System.out.println(date.compareTo(date2));
+		System.out.println(date2.compareTo(date3));
 	}
 
 }
