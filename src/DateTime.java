@@ -305,5 +305,25 @@ public class DateTime implements Comparable<DateTime>, Serializable  {
 		incrementDay();
 		incrementDay();
 	}
+	
+	public int dayOffest() {
+		int cnt = 0;
+		DateTime d = Calendar.FIRST_SUNDAY;
+		
+		if (d.compareTo(this) > 0) {
+			return -1;
+		}
+		
+		while (d.getDay() != day || d.getMonth() != month || d.getYear() != year) {
+			cnt += 1;
+			d.incrementDay();
+			
+			if (d.compareTo(this) < 0) {
+				return -1;
+			}
+		}
+		
+		return cnt % 7;
+	}
 
 }
