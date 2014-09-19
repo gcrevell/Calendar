@@ -37,9 +37,82 @@ public class Calendar implements Serializable {
 	public static final DateTime FIRST_SUNDAY = new DateTime("8-31-2014 12:00 am");
 	public static final DateTime LAST_SATURDAY = new DateTime("12-20-2014 11:59 pm");
 	
-	public boolean deleteEvent(Event e) {
+	public Event[] findAtTime(DateTime date){
+		ArrayList<Event> equal = new ArrayList<Event>();
+		for(Event e : events){
+			if(e.getDateTime().compareTo(date) == 0){
+				equal.add(e);
+			}
+		}
+		Event[] eventsAtTime = new Event[equal.size()];
+		for(int i = 0; i < equal.size(); i++){
+			eventsAtTime[i] = equal.get(i);
+		}
+		return eventsAtTime;
+	}
+	
+	public boolean deleteSingleEvent(Event e) {
+			events.remove(e);
+			return true;
+	}
+	
+	public boolean deleteSameDay(Event e){
+		DateTime date = e.getDateTime();
+		DateTime end = e.getEndTime();
+		while(date.compareTo(LAST_SATURDAY) == -1){
+			Event x = new Event(e.getName(), e.getType());
+			DateTime change = changeByWeek(date);
+			DateTime changeEnd = changeByWeek(end);
+			x.setDateTime(change);
+			x.setEndTime(changeEnd);
+			x.setRecur(e.getRecur());
+			x.setRecurrance(e.getRecurrance());
+			for(Event y : events){
+				if(y.compareTo(x)== 0){
+					events.remove(y);
+				}
+			}
+			date = change;
+			end = changeEnd;
+		}
+		return true;
+	}
+	
+	public boolean deleteAll(Event e){
+		int day = e.getDateTime().dayOffest();
+		for(int i = 0; i<7; i++){
+			if(e.getRecurrance()[i]){
+				if(i==day){
+					deleteSameDay(e);
+				}
+				else if(i<day){
+					int diff = 7-(i-day);
+					Event x = new Event(e.getName(), e.getType());
+					DateTime change = changeByDay(e.getDateTime(), diff);
+					DateTime changeEnd = changeByDay(e.getEndTime(), diff);
+					x.setDateTime(change);
+					x.setEndTime(changeEnd);
+					x.setRecur(e.getRecur());
+					x.setRecurrance(e.getRecurrance());
+					deleteSameDay(x);
+				}
+				else{
+					int diff = i-day;
+					Event x = new Event(e.getName(), e.getType());
+					DateTime change = changeByDay(e.getDateTime(), diff);
+					DateTime changeEnd = changeByDay(e.getEndTime(), diff);
+					x.setDateTime(change);
+					x.setEndTime(changeEnd);
+					x.setRecur(e.getRecur());
+					x.setRecurrance(e.getRecurrance());
+					deleteSameDay(x);
+				}
+			}
+			
+		}
 		return false;
 	}
+	
 	
 	public void createEvent(Event e) {
 		if (e.getRecur()) {
