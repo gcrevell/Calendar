@@ -83,7 +83,8 @@ public class CmdLine {
 				addEvent(cal);
 				saveCal(cal);
 			} else if (input.equalsIgnoreCase("Delete event")) {
-
+				deleteEvent(cal);
+				saveCal(cal);
 			} else if (input.equalsIgnoreCase("terminate")) {
 				break;
 			} else if (input.equalsIgnoreCase("view day")) {
@@ -121,6 +122,79 @@ public class CmdLine {
 				System.out.println("That is not a valid command. Please try again.");
 			}
 		}
+		in.close();
+	}
+
+	/**
+	 * Description
+	 * 
+	 * @author Gabriel Revells
+	 * 
+	 * @date Sep 20, 2014
+	 *
+	 * @param cal
+	 */
+	private static void deleteEvent(Calendar cal) {
+		Scanner in = new Scanner(System.in);
+		DateTime d = null;
+		
+		while (true) {
+			System.out.println("Please enter the date and time of the event to be deleted (m-d-y h:m am):");
+			try {
+				d = new DateTime(in.nextLine());
+			} catch (Exception ex) {
+				System.out.println("The date was not formatted correctly.");
+				continue;
+			}
+			
+			break;
+		}
+		
+		Event[] array = cal.findAtTime(d);
+		
+		if (array.length == 0) {
+			System.out.println("You do not have an event at that time.");
+		} else if (array.length == 1) {
+			if (array[0].getRecur()) {
+				System.out.println("Do you want to delete all occurences of this event? Yes or no:");
+				if ((in.nextLine()).equalsIgnoreCase("yes")) {
+					cal.deleteAll(array[0]);
+				} else {
+					cal.deleteSingleEvent(array[0]);
+				}
+			} else {
+				cal.deleteSingleEvent(array[0]);
+			}
+		} else {
+			System.out.println("You have multiple events at that time, please type the name of the one you wish to delete.");
+			for (Event e : array) {
+				System.out.println(e.getName());
+			}
+			System.out.println();
+			String del = in.nextLine();
+			for (Event e : array) {
+				if (e.getName().equalsIgnoreCase(del)) {
+					if (e.getRecur()) {
+						System.out.println("Do you want to delete all occurences of this event? Yes or no:");
+						if ((in.nextLine()).equalsIgnoreCase("yes")) {
+							cal.deleteAll(e);
+							System.out.println("The event has been deleted.");
+							return;
+						} else {
+							cal.deleteSingleEvent(e);
+							System.out.println("The event has been deleted.");
+							return;
+						}
+					} else {
+						cal.deleteSingleEvent(e);
+						System.out.println("The event has been deleted.");
+						return;
+					}
+				}
+			}
+			System.out.println("That event could not be found.");
+		}
+		
 		in.close();
 	}
 
