@@ -55,7 +55,12 @@ public class CmdLine {
 		inputLoop: while (true) {
 			System.out.println("To see a list of available commands, enter \"cmd\"");
 			System.out.println("Please type a command:");
-			String input = in.nextLine();
+			String input = "";
+			try {
+				input = in.nextLine();
+			} catch (Exception e) {
+				
+			}
 			if (input.equalsIgnoreCase("cmd")) {
 				commands();
 			} else if (input.equalsIgnoreCase("View week")) {
