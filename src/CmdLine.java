@@ -49,18 +49,19 @@ public class CmdLine {
 		if (cal == null) {
 			cal = new Calendar();
 		}
+		System.out.println();
+		System.out.println();
 		System.out.println("Welcome to the MTU calendar app!");
-		System.out.println("To use this calendar, simpley type your command at the prompt");
+		System.out.println("To use this calendar, simply type your command at the prompt");
 
 		inputLoop: while (true) {
+			System.out.println();
 			System.out.println("To see a list of available commands, enter \"cmd\"");
-			System.out.println("Please type a command:");
+			System.out.println("Please type a command:\n");
 			String input = "";
-			try {
-				input = in.nextLine();
-			} catch (Exception e) {
-				
-			}
+			
+			input = in.nextLine();
+			
 			if (input.equalsIgnoreCase("cmd")) {
 				commands();
 			} else if (input.equalsIgnoreCase("View week")) {
@@ -115,7 +116,7 @@ public class CmdLine {
 				} while (!dayView(cal, d));
 			} else if (input.equalsIgnoreCase("next event")) {
 				Event next = cal.getNextEvent();
-				
+
 				if (next == null) {
 					System.out.println("You do not have any more events.");
 				} else {
@@ -142,7 +143,7 @@ public class CmdLine {
 	private static void deleteEvent(Calendar cal) {
 		Scanner in = new Scanner(System.in);
 		DateTime d = null;
-		
+
 		while (true) {
 			System.out.println("Please enter the date and time of the event to be deleted (m-d-y h:m am):");
 			try {
@@ -151,12 +152,12 @@ public class CmdLine {
 				System.out.println("The date was not formatted correctly.");
 				continue;
 			}
-			
+
 			break;
 		}
-		
+
 		Event[] array = cal.findAtTime(d);
-		
+
 		if (array.length == 0) {
 			System.out.println("You do not have an event at that time.");
 		} else if (array.length == 1) {
@@ -199,7 +200,7 @@ public class CmdLine {
 			}
 			System.out.println("That event could not be found.");
 		}
-		
+
 		in.close();
 	}
 
@@ -329,7 +330,7 @@ public class CmdLine {
 			cal.createEvent(e);
 		} else {
 			Event e = new Event(name, type);
-			
+
 			while (true) {
 				System.out.println("Please enter the start date and time of the event (m-d-y h:m):");
 				try {
@@ -359,7 +360,7 @@ public class CmdLine {
 
 			cal.createEvent(e);
 		}
-		in.close();
+		//in.close();
 	}
 
 	/**
