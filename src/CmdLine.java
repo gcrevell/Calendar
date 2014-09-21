@@ -201,7 +201,7 @@ public class CmdLine {
 			System.out.println("That event could not be found.");
 		}
 
-		in.close();
+		//in.close();
 	}
 
 	/**
