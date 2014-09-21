@@ -318,12 +318,16 @@ public class DateTime implements Comparable<DateTime>, Serializable  {
 			cnt += 1;
 			d.incrementDay();
 			
-			if (d.compareTo(this) < 0) {
+			if (d.compareTo(this) > 0) {
 				return -1;
 			}
 		}
 		
 		return cnt % 7;
+	}
+	
+	public boolean timeEquals(DateTime date){
+		return this.hour == date.hour && this.minute == date. minute && this.am == date.am;
 	}
 
 }
