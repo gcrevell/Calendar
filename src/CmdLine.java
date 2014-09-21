@@ -9,7 +9,7 @@ import java.util.Scanner;
 /**
  * @filename CmdLine.java
  *
- * @author Gabriel Revells
+ * @author Gabriel Revells and Erica Pincumbe
  *
  * @date Sep 15, 2014
  *

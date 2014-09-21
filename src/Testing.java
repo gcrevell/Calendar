@@ -3,7 +3,7 @@ import java.util.Date;
 /**
  * @filename Testing.java
  *
- * @author Gabriel Revells
+ * @author Gabriel Revells and Erica Pincumbe
  *
  * @date Sep 14, 2014
  *
@@ -19,7 +19,7 @@ import java.util.Date;
  * 
  * ClassName - 
  * 
- * @author Gabriel Revells
+ * @author Gabriel Revells and Erica Pincumbe
  *
  * @date Sep 14, 2014
  *

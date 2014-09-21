@@ -20,7 +20,7 @@ import java.util.Scanner;
  * 
  * ClassName - 
  * 
- * @author Gabriel Revells
+ * @author Gabriel Revells and Erica Pincumbe
  *
  * @date Sep 14, 2014
  *
