@@ -59,6 +59,7 @@ public class Calendar implements Serializable {
 	public boolean deleteSameDay(Event e){
 		DateTime date = e.getDateTime();
 		DateTime end = e.getEndTime();
+		TreeSet<Event> toDelete = new TreeSet<Event>();
 		while(date.compareTo(LAST_SATURDAY) == -1){
 			Event x = new Event(e.getName(), e.getType());
 			DateTime change = changeByWeek(date);
@@ -69,12 +70,19 @@ public class Calendar implements Serializable {
 			x.setRecurrance(e.getRecurrance());
 			for(Event y : events){
 				if(y.compareTo(x)== 0){
-					events.remove(y);
+					toDelete.add(y);
+					System.out.println(y.getDateTime().toString());
 				}
+
 			}
 			date = change;
 			end = changeEnd;
 		}
+		for(Event f : toDelete){
+			System.out.println(f.getDateTime().toString());
+		}
+
+		events.removeAll(toDelete);
 		return true;
 	}
 	
